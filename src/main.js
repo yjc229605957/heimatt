@@ -12,6 +12,8 @@ import Vant from 'vant'
 import 'vant/lib/index.css'
 // 导入字体图标icon
 import './style/iconfont.css'
+// 导入全局时间过滤器
+import './filter/timeFilter'
 // 在vue上注册
 Vue.use(Vant)
 

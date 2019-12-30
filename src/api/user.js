@@ -11,7 +11,22 @@ function userLogin (data) {
     data
   })
 }
-
-export {
-  userLogin
+// 拉黑用户请求方法
+function userBlacklists (target) {
+  return instance({
+    url: '/user/blacklists',
+    method: 'post',
+    data: {
+      target
+    }
+  })
 }
+// 取消拉黑用户请求方法
+function userBlacklistsCancel (target) {
+  return instance({
+    url: `http://ttapi.research.itcast.cn/app/v1_0/user/blacklists/:target=${target}`,
+    method: 'DELETE'
+  })
+}
+
+export { userLogin, userBlacklists, userBlacklistsCancel }

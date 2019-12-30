@@ -51,7 +51,7 @@ export default {
   data () {
     return {
       loginData: {
-        mobile: '13811111111',
+        mobile: '13811155555',
         code: '246810'
       },
       // 手机号错误提示
@@ -83,7 +83,7 @@ export default {
             // 将服务器返回的token存入localstorage中
             this.$store.commit('setUser', res.data.data)
             // 转跳至home页
-            this.$router.push('/home')
+            this.$router.push('/layout')
           }
         } catch {
           this.$toast.fail('登录失败')
