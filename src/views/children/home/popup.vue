@@ -60,7 +60,7 @@
         :key="index"
       >
         <template slot="text">
-          <span class="channelText">{{ item.name }}</span>
+          <span :class="{highlight:index===channelIndex}" class="channelText" @click="$emit('update:channelIndex',index)">{{ item.name }}</span>
           <!-- 删除频道 -->
           <van-icon
             @click="removeChannel(index, item)"
@@ -100,7 +100,7 @@ import { AllchannelsList, AddChannels } from '../../../api/channels.js'
 import { setlocal } from '../../../utils/local'
 export default {
   name: 'popup',
-  props: ['value', 'channelList'],
+  props: ['value', 'channelList', 'channelIndex'],
   data () {
     return {
       // 控制x图标显示隐藏
@@ -207,6 +207,9 @@ export default {
     // 频道宫格文本
     .channelText {
       font-size: 12px;
+    }
+    .highlight{
+      color: #f85a5a;
     }
   }
   .van-cell:not(:last-child)::after {

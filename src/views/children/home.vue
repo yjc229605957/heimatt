@@ -1,7 +1,9 @@
 <template>
   <div class="home_Box">
     <!-- 头部导航 -->
-    <van-nav-bar class="head_nav" title="首页" />
+    <van-nav-bar class="head_nav" title="首页">
+      <van-icon class="searchBar" name="search" slot="right" />
+    </van-nav-bar>
     <!-- 标签页 -->
     <!-- v-model绑定频道的下标   animated:切换动画 -->
     <van-tabs class="channelBox" v-model="channelIndex" animated>
@@ -40,7 +42,7 @@
                     v-for="(imgitem, imgindex) in item.cover.images"
                     :key="imgindex"
                   >
-                    <van-image :src="imgitem" />
+                    <van-image lazy-load :src="imgitem" />
                   </van-grid-item>
                 </van-grid>
               </div>
@@ -55,7 +57,7 @@
                   <span>{{ item.pubdate | timefilter }}</span>
                 </span>
                 <!-- 更多选项按钮 -->
-                <van-icon @click="showMore(item, index)" name="cross" />
+                <van-icon @click="showMore(item, index)" name="ellipsis" />
               </div>
             </van-cell>
           </van-list>
@@ -73,7 +75,13 @@
       子传父@input="show=$event" 子组件通过v-on绑定事件传递 父组件使用事件接收
     -->
     <!-- <popup ref="popup" :value='show' @input="show=$event"></popup> -->
-    <popup ref="popup" v-model="show" :channelList="channelList"></popup>
+    <!-- <popup ref="popup" v-model="show" :channelList="channelList" :channelIndex='channelIndex' @update:channelIndex="channelIndex=$event"></popup> -->
+    <popup
+      ref="popup"
+      v-model="show"
+      :channelList="channelList"
+      :channelIndex.sync="channelIndex"
+    ></popup>
     <!-- 更多选项组件 -->
     <!-- articleId:文章id  articleIndex:文章下标  removeArt:删除文章  autName:作者id -->
     <more
@@ -227,6 +235,11 @@ export default {
     .van-nav-bar__title {
       color: #fff;
     }
+    // 搜索按钮
+    .searchBar {
+      color: #fff;
+      font-size: 20px;
+    }
   }
   //频道盒子
   .channelBox {
@@ -283,11 +296,12 @@ export default {
   .channeMenu {
     position: fixed;
     z-index: 999;
-    top: 44px;
+    top: 46px;
     right: 0;
     height: 44px;
     width: 10%;
     text-align: center;
+    background-color: #fff;
     i {
       line-height: 44px;
       font-size: 30px;
