@@ -2,9 +2,10 @@
   <div class="home_Box">
     <!-- 头部导航 -->
     <van-nav-bar class="head_nav" title="首页">
-      <van-icon class="searchBar" name="search" slot="right" />
+      <!-- 搜索按钮 -->
+      <van-icon @click="$router.push('/layout/search')" class="search" name="search" slot="right" />
     </van-nav-bar>
-    <!-- 标签页 -->
+    <!-- 频道列表 -->
     <!-- v-model绑定频道的下标   animated:切换动画 -->
     <van-tabs class="channelBox" v-model="channelIndex" animated>
       <!-- 频道列表 -->
@@ -93,6 +94,7 @@
       @onLoad="onRefresh"
     ></more>
     <!-- <more :value='moreShow' @input="moreShow=$evnet" ></more> -->
+
   </div>
 </template>
 
@@ -236,7 +238,7 @@ export default {
       color: #fff;
     }
     // 搜索按钮
-    .searchBar {
+    .search {
       color: #fff;
       font-size: 20px;
     }

@@ -28,5 +28,12 @@ function userBlacklistsCancel (target) {
     method: 'DELETE'
   })
 }
+// 获取用户自己信息请求方法
+function userInfo () {
+  return instance({
+    url: 'user',
+    method: 'GET'
+  })
+}
 
-export { userLogin, userBlacklists, userBlacklistsCancel }
+export { userLogin, userBlacklists, userBlacklistsCancel, userInfo }
