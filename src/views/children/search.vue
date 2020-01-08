@@ -127,12 +127,12 @@ export default {
   },
   created () {
     // 在localstorage中获取搜索历史并赋值给历史列表
-    this.historyList = getlocal('history')
+    this.historyList = getlocal('history') || []
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .searchBar {
   // 搜索框
   .van-search__content {

@@ -1,6 +1,7 @@
 <template>
   <div class="searchResult">
-    <van-nav-bar class="login_nav" title="搜索结果">
+    <!-- 顶部导航 -->
+    <van-nav-bar class="top_nav" title="搜索结果">
       <van-icon @click="$router.back()" name="arrow-left" slot="left" />
     </van-nav-bar>
     <!-- 搜索结果文章列表 -->
@@ -17,6 +18,7 @@
         v-for="(item, index) in searchList"
         :key="index"
         :title="item.title"
+        @click="$router.push(`/detail/${item.art_id}`)"
       >
         <div>
           <!-- 文章浏览图 -->
@@ -42,20 +44,22 @@
         </div>
         <!-- 文章下方 点赞 收藏等工具 -->
         <van-grid :column-num="3">
-          <van-grid-item icon="comment-o" text="评论" />
+          <van-grid-item @click="addComment" icon="comment-o" text="评论" />
           <van-grid-item
             v-if="item.iconLike === 'like-o'"
-            @click="item.iconLike = 'like'"
+            @click="addLike(item)"
             :icon="item.iconLike"
             text="点赞"
+            type="danger"
           />
           <van-grid-item
             v-else
-            @click="item.iconLike = 'like-o'"
+            @click="addLike(item)"
             :icon="item.iconLike"
-            text="点赞"
+            text="已点赞"
+            class="red"
           />
-          <van-grid-item icon="share" text="分享" />
+          <van-grid-item @click="addShare" icon="share" text="分享" />
         </van-grid>
       </van-cell>
     </van-list>
@@ -77,6 +81,7 @@ export default {
     }
   },
   methods: {
+    // 文章列表加载事件
     async onLoad () {
       this.page++
       let res = await searchRes({
@@ -93,6 +98,71 @@ export default {
       if (res.data.data.results.length <= 0) {
         this.finished = true
       }
+    },
+    // 点击评论按钮
+    addComment (item) {
+      // 判断用户是否登录
+      let user = this.$store.state.user
+      window.console.log(user)
+      if (user.token) {
+        // 已登录
+        window.console.log('评论了')
+      } else {
+        // 未登录 询问用户是否前往登陆页面
+        this.$dialog
+          .confirm({
+            title: '操作提示',
+            message: '需要登陆才可以评论哦!',
+            // 修改确定按钮文本
+            confirmButtonText: '登陆'
+          })
+          .then(() => {
+            // 确定登陆
+            this.$router.push('/checklogin')
+          })
+      }
+    },
+    // 点击点赞按钮
+    addLike (item) {
+      // 判断用户是否登录
+      // 使用全局验证登陆方法 验证用户是否登录
+      if (this.$check() === true) {
+        // 已登录
+        window.console.log('点赞了')
+        item.iconLike = 'like'
+      } else {
+        // 未登录 询问用户是否前往登陆页面
+        this.$dialog
+          .confirm({
+            title: '操作提示',
+            message: '需要登陆才可以点赞哦!',
+            // 修改确定按钮文本
+            confirmButtonText: '登陆'
+          })
+          .then(() => {
+            // 确定登陆
+            this.$router.push('/checklogin')
+          })
+      }
+    },
+    // 点击分享按钮
+    addShare (item) {
+      if (this.$check() === true) {
+        window.console.log('分享了')
+      } else {
+        // 未登录 询问用户是否前往登陆页面
+        this.$dialog
+          .confirm({
+            title: '操作提示',
+            message: '需要登陆才可以分享哦!',
+            // 修改确定按钮文本
+            confirmButtonText: '登陆'
+          })
+          .then(() => {
+            // 确定登陆
+            this.$router.push('/checklogin')
+          })
+      }
     }
   },
   created () {
@@ -102,16 +172,14 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .searchResult {
-  .login_nav {
+  .top_nav {
     width: 100%;
     position: fixed;
     top: 0;
     background-color: #3e9df8;
-    .van-nav-bar__left .van-icon {
-      color: #fff;
-    }
+    .van-nav-bar__left .van-icon,
     .van-nav-bar__title {
       color: #fff;
     }
@@ -161,6 +229,10 @@ export default {
           margin: 0 5px;
           line-height: 24px;
         }
+      }
+      // 点赞背景色
+      .red {
+        color: red;
       }
     }
   }

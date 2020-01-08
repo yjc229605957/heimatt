@@ -24,7 +24,7 @@ function userBlacklists (target) {
 // 取消拉黑用户请求方法
 function userBlacklistsCancel (target) {
   return instance({
-    url: `http://ttapi.research.itcast.cn/app/v1_0/user/blacklists/:target=${target}`,
+    url: `http://ttapi.research.itcast.cn/app/v1_0/user/blacklists/:${target}`,
     method: 'DELETE'
   })
 }
@@ -35,5 +35,62 @@ function userInfo () {
     method: 'GET'
   })
 }
+// 获取用户个人信息请求方法
+function userInfoProfile () {
+  return instance({
+    url: 'user/profile',
+    method: 'GET'
+  })
+}
+// 关注用户请求方法
+function userFollow (target) {
+  return instance({
+    url: 'user/followings',
+    method: 'POST',
+    data: {
+      target
+    }
+  })
+}
+// 取消关注用户请求方法
+function userNoFollow (target) {
+  return instance({
+    url: `user/followings/${target}`,
+    method: 'DELETE'
+  })
+}
+// 设置用户头像请求方法
+function userUpIcon (photo) {
+  let fd = new FormData()
+  fd.append('photo', photo)
+  return instance({
+    url: 'user/photo',
+    method: 'PATCH',
+    data: fd
+  })
+}
+// 设置用户个人资料请求方法
+function userSetProfile ({ name, gender, birthday, intro }) {
+  return instance({
+    url: 'user/profile',
+    method: 'PATCH',
+    data: {
+      name,
+      gender,
+      birthday,
+      intro
+    }
+  })
+}
 
-export { userLogin, userBlacklists, userBlacklistsCancel, userInfo }
+export {
+  userLogin,
+  userBlacklists,
+  userBlacklistsCancel,
+  userInfo,
+  userInfoProfile,
+  userFollow,
+  userNoFollow,
+  userUpIcon,
+  userSetProfile
+}

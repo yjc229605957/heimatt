@@ -3,16 +3,16 @@
     <!-- 用户信息模块 -->
     <div class="userInfo">
       <!-- 已登录则显示用户信息 -->
-      <div class="userBox" v-if="userToken">
+      <div class="userBox" v-if="isLogin">
         <!-- 用户头像 昵称等信息 -->
-        <div class="userTitle">
+        <div @click="$router.push('/checkUserInfo')" class="userTitle">
           <div class="userTitle_left">
             <div class="userIcon">
               <!-- ../../../public/头像.jpg -->
               <img :src="userInfo.photo" height="80px" />
             </div>
             <div class="username">
-              <p>{{userInfo.name}}</p>
+              <p>{{ userInfo.name }}</p>
               <van-button round size="mini">申请认证</van-button>
             </div>
           </div>
@@ -30,19 +30,19 @@
           <van-grid :column-num="3" :border="false">
             <van-grid-item>
               <template slot="text">
-                <p>{{userInfo.art_count}}</p>
+                <p>{{ userInfo.art_count }}</p>
                 <span>动态</span>
               </template>
             </van-grid-item>
             <van-grid-item>
               <template slot="text">
-                <p>{{userInfo.follow_count}}</p>
+                <p>{{ userInfo.follow_count }}</p>
                 <span>关注</span>
               </template>
             </van-grid-item>
             <van-grid-item>
               <template slot="text">
-                <p>{{userInfo.fans_count}}</p>
+                <p>{{ userInfo.fans_count }}</p>
                 <span>粉丝</span>
               </template>
             </van-grid-item>
@@ -50,8 +50,8 @@
         </div>
       </div>
       <!-- 未登录则显示登录按钮 -->
-      <div v-else>
-        <div class="loginBut">
+      <div class="userBox" v-else>
+        <div class="loginBut" @click="$router.push('/checklogin')">
           <van-icon name="user-circle-o" />
           <span>登录</span>
         </div>
@@ -59,10 +59,10 @@
     </div>
     <!-- 工具栏 -->
     <div class="toolList">
-      <van-grid :column-num="userToken ? 3 : 2">
+      <van-grid :column-num="isLogin ? 3 : 2">
         <van-grid-item icon="star-o" text="收藏" />
         <van-grid-item icon="underway-o" text="历史" />
-        <van-grid-item v-if="userToken" icon="records" text="作品" />
+        <van-grid-item v-if="isLogin" icon="records" text="作品" />
       </van-grid>
     </div>
     <div>
@@ -72,7 +72,7 @@
       </van-cell-group>
       <van-cell-group>
         <van-cell title="用户反馈" is-link />
-        <van-cell title="小智同学" is-link />
+        <van-cell @click="$router.push('/Ai')" title="小智同学" is-link />
         <van-cell title="系统设置" is-link />
       </van-cell-group>
     </div>
@@ -85,14 +85,16 @@ export default {
   name: 'my',
   data () {
     return {
-      userToken: this.$store.state.user.token,
+      isLogin: this.$store.state.user.token,
       userInfo: ''
     }
   },
   async created () {
-    let res = await userInfo()
-    this.userInfo = res.data.data
-    window.console.log(res, this.userInfo)
+    if (this.$store.state.user.token) {
+      let res = await userInfo()
+      this.userInfo = res.data.data
+      window.console.log(res, this.userInfo)
+    }
   }
 }
 </script>
@@ -114,12 +116,7 @@ export default {
     .loginBut {
       width: 50px;
       height: 75px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
+      margin: 0 auto;
       text-align: center;
       .van-icon {
         color: #fff;
@@ -143,8 +140,8 @@ export default {
       }
       // 头像
       .userIcon {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         overflow: hidden;
         margin: 0 20px;
@@ -158,9 +155,9 @@ export default {
         }
         button {
           width: 60px;
-          font-size: 12px;
           height: 18px;
-          line-height: 12px;
+          font-size: 12px;
+          line-height: 1;
           color: #3f9dfa;
           font-weight: 700;
         }
@@ -170,8 +167,7 @@ export default {
         display: flex;
         background-color: #3b82c9;
         border-radius: 50px 0 0 50px;
-        height: 42px;
-        width: 90px;
+        padding: 7px;
         align-items: center;
         font-size: 12px;
         .van-icon {

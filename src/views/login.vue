@@ -77,13 +77,20 @@ export default {
           // 传入参数发送登录请求
           let res = await userLogin(this.loginData)
           window.console.log(res)
+          window.console.log(this.$route)
           if (res.status === 201) {
             // 提示登录成功
             this.$toast('登录成功')
             // 将服务器返回的token存入localstorage中
             this.$store.commit('setUser', res.data.data)
-            // 转跳至home页
-            this.$router.push('/layout')
+            // 登陆成功判断登陆方式转跳页面
+            if (this.$route.path === '/login') {
+              // 正常登陆转跳至home页
+              this.$router.push('/layout/home')
+            } else {
+              // 验证登陆转跳至上一页面
+              this.$router.back()
+            }
           }
         } catch {
           this.$toast.fail('登录失败')

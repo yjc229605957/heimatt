@@ -31,6 +31,7 @@
               v-for="(item, index) in item.list"
               :key="index"
               :title="item.title"
+              @click="$router.push(`/detail/${item.art_id}`)"
             >
               <div>
                 <!-- 文章浏览图 -->
@@ -148,7 +149,6 @@ export default {
         channelId: id,
         timestamp: Date.now()
       })
-      window.console.log(res)
       // 判断频道的文章列表已经全部获取完(没有文章)时 将finished设置为true 这样就不会一直在加载中
       if (res.data.data.results.length === 0) {
         currentPage.finished = true

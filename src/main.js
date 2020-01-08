@@ -14,11 +14,26 @@ import 'vant/lib/index.css'
 import './style/iconfont.css'
 // 导入全局时间过滤器
 import './filter/timeFilter'
-// 在vue上注册
+// 导入全局验证登陆方法
+import Mychecke from './utils/checklogin'
+
+// 在vue上注册插件
 Vue.use(Vant)
 Vue.use(Lazyload)
+Vue.use(Mychecke)
 
+// 阻止启动生产消息
 Vue.config.productionTip = false
+
+// 全局验证登陆方法
+Vue.prototype.$check = function () {
+  let user = store.state.user
+  if (user.token) {
+    return true
+  } else {
+    return false
+  }
+}
 
 new Vue({
   router,
