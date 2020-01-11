@@ -89,8 +89,9 @@ export default {
     }
   },
   created () {
+    // 初始化socket对象连接服务器
     this.socket = io('http://ttapi.research.itcast.cn', {
-      data: {
+      query: {
         token: this.$store.state.user.token
       }
     })
@@ -98,6 +99,7 @@ export default {
     this.socket.on('message', data => {
       console.log(data)
       this.chatArr.push({ flag: 'robot', msg: data.msg })
+      // this.$scoll
     })
   }
 }
